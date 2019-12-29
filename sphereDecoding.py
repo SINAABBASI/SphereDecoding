@@ -1,8 +1,8 @@
 import numpy as np
 
 INF = 1000111000111
-m = 3 ##transmiter
-n = 3 ##reciver n >= m
+m = 5 ##transmiter
+n = 5 ##reciver n >= m
 sigma = 0.5 ## varianc 
 alpha = 2
 
@@ -14,15 +14,14 @@ def qDecom(temp) :
             r1 = temp[i][j]
         for j in range(m,n-m):
             r2 = temp[i][j]
-
     return [r1,r2]
 
 
 ###Input H(n,m) , d ,x(1,n) , s?(1,m)
 
-###paper sample
+##paper sample
 # H = np.array([[2, -1, -1] ,[-1, 0 ,  -2],[-1,-1,-1]])
-#s = np.zeros(m)
+# s = np.zeros(m)
 # x = np.array([[-1],[1],[0]])
 
 ###checker for Guassian sample
@@ -81,50 +80,61 @@ answer = np.zeros(m)
 # print(R)
 ###Start
 
+for j in range(1,5) :
+    k = m - 1
+    _y = y.copy()
+    D = np.zeros(m)
+    UB = np.zeros(m)
+    D[k] = np.sqrt(d - minus)
+    setUB = 1
+    while True :
+        flopsCount += 1
+        if setUB == 1:
+            if (D[k] + _y[k]) / R[k][k] > (-D[k] + _y[k]) / R[k][k]  : 
+                UB[k] = np.floor((D[k] + _y[k]) / R[k][k])
+                s[k] = np.ceil((-D[k] + _y[k]) / R[k][k])  - 1
+            else :
+                UB[k] = np.floor((-D[k] + _y[k]) / R[k][k])
+                s[k] = np.ceil((D[k] + _y[k]) / R[k][k])  - 1
+            
+        s[k] = s[k] + 1
+        # print(k,s[k],UB[k])
+        setUB = 0
+        if s[k] <= UB[k] :
+            if k == 0 :
+                if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
+                    ans = np.linalg.norm(np.dot(H,s.T)-x.T)
+                    answer = s.copy()
+                    # print("***",answer)
+                # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )
+            else :
+                k = k - 1
+                _y[k] = y[k]
+                for i in range(k+1,m) :
+                    flopsCount += 1
+                    _y[k] -= (R[k][i] * s[i])
+            
+                D[k] = np.sqrt(D[k+1]**2 - (_y[k+1] - R[k+1][k+1] * s[k+1])**2)
+                setUB = 1
+            continue
+        else : 
+            k = k + 1
+            if k == m :
+                break
 
-while True :
-    flopsCount += 1
-    if setUB == 1:
-        if (D[k] + _y[k]) / R[k][k] > (-D[k] + _y[k]) / R[k][k]  : 
-            UB[k] = np.floor((D[k] + _y[k]) / R[k][k])
-            s[k] = np.ceil((-D[k] + _y[k]) / R[k][k])  - 1
-        else :
-            UB[k] = np.floor((-D[k] + _y[k]) / R[k][k])
-            s[k] = np.ceil((D[k] + _y[k]) / R[k][k])  - 1
-        
-    s[k] = s[k] + 1
-    # print(k,s[k],UB[k])
-    setUB = 0
-    if s[k] <= UB[k] :
-        if k == 0 :
-            if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
-                ans = np.linalg.norm(np.dot(H,s.T)-x.T)
-                answer = s.copy()
-                # print("***",answer)
-            # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )
-        else :
-            k = k - 1
-            _y[k] = y[k]
-            for i in range(k+1,m) :
-                flopsCount += 1
-                _y[k] -= (R[k][i] * s[i])
-           
-            D[k] = np.sqrt(D[k+1]**2 - (_y[k+1] - R[k+1][k+1] * s[k+1])**2)
-            setUB = 1
-        continue
-    else : 
-        k = k + 1
-        if k == m :
-            break
+    if ans == INF :
+        print("The Radius is not big enough")
+        d *= alpha
+        print(d)
+    else :
+        break
 
-if ans == INF :
-    print("The Radius is not big enough")
-else :
-    print("flops: ",flopsCount * 20)
-    print(ans)
-    print(answer.T)
-    ### checker for [H*answer - x == ans] 
-    # print(np.dot(H,answer.T),x)
-    # print(np.dot(H,answer.T) - x.T)
-    # print(np.linalg.norm(np.dot(H,answer.T)-x.T))
-    # print(answers)
+
+print("flops: ",flopsCount * 20)
+print(ans)
+print(answer.T)
+### checker for [H*answer - x == ans] 
+# print(np.dot(H,answer.T),x)
+# print(np.dot(H,answer.T) - x.T)
+# print(np.linalg.norm(np.dot(H,answer.T)-x.T))
+# print(answers)

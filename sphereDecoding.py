@@ -1,6 +1,6 @@
 import numpy as np
 
-
+INF = 1000111000111
 m = 3 ##transmiter
 n = 3 ##reciver n >= m
 sigma = 0.5 ## varianc 
@@ -19,16 +19,34 @@ def qDecom(temp) :
 
 
 ###Input H(n,m) , d ,x(1,n) , s?(1,m)
-H = np.array([[2, -1, -1] ,[-1, 0 ,  -2],[-1,-1,-1]])
+
+###paper sample
+# H = np.array([[2, -1, -1] ,[-1, 0 ,  -2],[-1,-1,-1]])
+#s = np.zeros(m)
+# x = np.array([[-1],[1],[0]])
+
+###checker for Guassian sample
+# v = np.random.normal(0, sigma, n)
+# s = np.random.random_integers(0,10,(m))
+# x = np.dot(H,s.T) + v
+# print("H  is = ",H)
+# print("v is = ",v )
+# print("s is = ", s)
+# print("x is = ", x)
+
+
+###random sample
+H = 10 * np.random.rand(n,m)
+s = np.random.random_integers(0,10,(m))
+x = 10 * np.random.rand(n)
+
+
+
 d = alpha * sigma * n
-s = np.zeros(m)
-v = np.random.normal(0, sigma, n)
-x = np.array([[-1],[1],[0]])
-
-
+print("Algorithm est for radius = ",np.sqrt(d))
 babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
 babaiD = np.linalg.norm(x-np.dot(H,babaiB))
-print("Babi est for d :",babaiD)
+print("Babai est for radius =",babaiD)
 # s = np.zeros(m)
 
 q1 = np.zeros((n,m),dtype='complex')
@@ -44,28 +62,26 @@ else :
     q2H = q2.conj().T
 
 ##initialization
-q1H = q1.conj().T 
-
-y = np.dot(q1H,x)
+ 
+y = np.dot(q1.conj().T,x)
 _y = y.copy()
-
 minus = 0
 if n != m :
-    minus = np.linalg.norm(np.dot(q2H,x))**2
+    minus = np.linalg.norm(np.dot(q2.conj().T,x))**2
 
 D = np.zeros(m)
 UB = np.zeros(m)
-
 k = m - 1
-D[k] = np.sqrt(d**2 - minus)
+D[k] = np.sqrt(d - minus)
+setUB = 1
+flopsCount = 0
+ans = INF
+answer = np.zeros(m)
 
 # print(R)
 ###Start
-setUB = 1
 
-answers = []
-flopsCount = 0
-ans = 10000000000
+
 while True :
     flopsCount += 1
     if setUB == 1:
@@ -84,7 +100,7 @@ while True :
             if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
                 ans = np.linalg.norm(np.dot(H,s.T)-x.T)
                 answer = s.copy()
-                # print("***",s,answer)
+                # print("***",answer)
             # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )
         else :
             k = k - 1
@@ -94,7 +110,6 @@ while True :
                 _y[k] -= (R[k][i] * s[i])
            
             D[k] = np.sqrt(D[k+1]**2 - (_y[k+1] - R[k+1][k+1] * s[k+1])**2)
-            # print(D[k+1],D[k])
             setUB = 1
         continue
     else : 
@@ -102,10 +117,14 @@ while True :
         if k == m :
             break
 
-print("flops: ",flopsCount * 20)
-print(ans)
-print(answer.T)
-# print(np.dot(H,answer.T),x)
-# print(np.dot(H,answer.T) - x.T)
-# print(np.linalg.norm(np.dot(H,answer.T)-x.T))
-# print(answers)
+if ans == INF :
+    print("The Radius is not big enough")
+else :
+    print("flops: ",flopsCount * 20)
+    print(ans)
+    print(answer.T)
+    ### checker for [H*answer - x == ans] 
+    # print(np.dot(H,answer.T),x)
+    # print(np.dot(H,answer.T) - x.T)
+    # print(np.linalg.norm(np.dot(H,answer.T)-x.T))
+    # print(answers)

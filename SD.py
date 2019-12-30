@@ -1,21 +1,8 @@
 import numpy as np
 import math as math
-import matplotlib.pyplot as plt
-pltx = []
-plty = []
-pltBabai = []
-pltAlgo = []
-INF = 1000111000111
 
 
-for step in range(10,110,10):
-    pltx.append(step)
-    m = step ##transmiter
-    n = step ##reciver n >= m
-    sigma = 0.5 ## varianc 
-    alpha = 2
-
-    def qDecom(temp) :
+def qDecom(temp,n,m) :
         r1=np.zeros((n,m))
         r2=np.zeros((n,n-m))
         for i in range(0,n) :
@@ -26,52 +13,31 @@ for step in range(10,110,10):
         return [r1,r2]
 
 
-    ###Input H(n,m) , d ,x(1,n) , s?(1,m)
-
-    #paper sample
-    # H = np.array([[2, -1, -1] ,[-1, 0 ,  -2],[-1,-1,-1]])
-    # s = np.zeros(m)
-    # x = np.array([[-1],[1],[0]])
-
-    ###checker for Guassian sample
-    # v = np.random.normal(0, sigma, n)
-    # s = np.random.random_integers(0,10,(m))
-    # x = np.dot(H,s.T) + v
-    # print("H  is = ",H)
-    # print("v is = ",v )
-    # print("s is = ", s)
-    # print("x is = ", x)
-
-
-    # ###random sample
-    H = 10 * np.random.rand(n,m)
-    s = 2*np.random.random_integers(1,4,(m))-5
+def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
+    INF = 1000111000111
+    alpha = 2
     v = np.random.normal(0, sigma, n)
+    s = 2 * np.random.random_integers(1,QAM,(m))- (QAM + 1)
     x = np.dot(H,s.T) + v
-    # print(s)
     s = np.zeros(m)
-
     d = alpha * sigma * n
     print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
     babaiD = np.linalg.norm(x-np.dot(H,babaiB))
     print("Babai est for radius =",babaiD)
     pltBabai.append(babaiD)
-    # s = np.zeros(m)
 
     q1 = np.zeros((n,m),dtype='complex')
     res = np.linalg.qr(H)
     R = res[1]
-
     if n == m :
         q1 = res[0]
         q2 = None
     else :
         q2 = np.zeros((n,n-m))
-        [q1 , q2] = qDecom(res[0])
+        [q1 , q2] = qDecom(res[0],n,m)
         q2H = q2.conj().T
 
-    ##initialization
     
     y = np.dot(q1.conj().T,x)
     _y = y.copy()
@@ -87,11 +53,9 @@ for step in range(10,110,10):
     flopsCount = 0
     ans = INF
     answer = np.zeros(m)
-
-    # print(R)
+    
     ###Start
-
-    for j in range(1,50) :
+    for j in range(1,10) :
         k = m - 1
         _y = y.copy()
         D = np.zeros(m)
@@ -108,7 +72,7 @@ for step in range(10,110,10):
                     UB[k] = np.floor((-D[k] + _y[k]) / R[k][k])
                     s[k] = np.ceil((D[k] + _y[k]) / R[k][k])  - 1
                 te = s[k] + 1
-                for j in range(3, -4 , -2):
+                for j in range(QAM - 1, -QAM , -2):
                     flopsCount += 1
                     if te > j : 
                         break
@@ -147,33 +111,14 @@ for step in range(10,110,10):
             break
 
     flopsCount *= 14
-    print("flops: ",step,flopsCount)
-    print(ans)
-    print(answer.T)
-    plty.append(math.log(flopsCount,m))
-### checker for [H*answer - x == ans] 
-# print(np.dot(H,answer.T),x)   
-# print(np.dot(H,answer.T) - x.T)
-# print(np.linalg.norm(np.dot(H,answer.T)-x.T))
-# print(answers)
 
-
-
-
-####Plot the number of Flops
-# plt.plot(pltx, plty) 
-# plt.xlabel('m') 
-# plt.ylabel('number of Flops : Log(base = m)') 
-# plt.title('My first graph!') 
-# plt.show() 
-
-
-
-###Plot different bitween Babai radius estimation and algorithm radius estimation
-plt.plot(pltx, pltBabai,label = "Babai estimation")
-plt.plot(pltx, pltAlgo,label = "Algorithm estimation") 
-plt.legend() 
-plt.xlabel('m') 
-plt.ylabel('Radius') 
-plt.title('Different Radius estimation') 
-plt.show() 
+    ### checker for [H*answer - x == ans] 
+    
+    # print("flops: ",step,flopsCount)
+    # print(ans)
+    # print(answer.T)
+    # print(np.dot(H,answer.T),x)   
+    # print(np.dot(H,answer.T) - x.T)
+    # print(np.linalg.norm(np.dot(H,answer.T)-x.T))
+    # print(answers)
+    return flopsCount,ans,answer

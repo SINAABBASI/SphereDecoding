@@ -2,16 +2,6 @@ import numpy as np
 import math as math
 
 
-def qDecom(temp,n,m) :
-        r1=np.zeros((n,m))
-        r2=np.zeros((n,n-m))
-        for i in range(0,n) :
-            for j in range(0,m) :
-                r1 = temp[i][j]
-            for j in range(m,n-m):
-                r2 = temp[i][j]
-        return [r1,r2]
-
 
 def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
     INF = 1000111000111
@@ -19,7 +9,8 @@ def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
     v = np.random.normal(0, sigma, n)
     s = 2 * np.random.random_integers(1,QAM,(m))- (QAM + 1)
     x = np.dot(H,s.T) + v
-    s = np.zeros(m)
+    # msg = s.copy()
+
     d = alpha * sigma * n
     print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
@@ -30,25 +21,15 @@ def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
     q1 = np.zeros((n,m),dtype='complex')
     res = np.linalg.qr(H)
     R = res[1]
-    if n == m :
-        q1 = res[0]
-        q2 = None
-    else :
-        q2 = np.zeros((n,n-m))
-        [q1 , q2] = qDecom(res[0],n,m)
-        q2H = q2.conj().T
+    q1 = res[0]
 
-    
     y = np.dot(q1.conj().T,x)
     _y = y.copy()
-    minus = 0
-    if n != m :
-        minus = np.linalg.norm(np.dot(q2.conj().T,x))**2
-
+ 
     D = np.zeros(m)
     UB = np.zeros(m)
     k = m - 1
-    D[k] = np.sqrt(d - minus)
+    D[k] = np.sqrt(d)
     setUB = 1
     flopsCount = 0
     ans = INF
@@ -60,12 +41,13 @@ def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
         _y = y.copy()
         D = np.zeros(m)
         UB = np.zeros(m)
-        D[k] = np.sqrt(d - minus)
+        D[k] = np.sqrt(d)
         setUB = 1
         while True :
             flopsCount += 1
             if setUB == 1:
                 if (D[k] + _y[k]) / R[k][k] > (-D[k] + _y[k]) / R[k][k]  : 
+                   
                     UB[k] = np.floor((D[k] + _y[k]) / R[k][k])
                     s[k] = np.ceil((-D[k] + _y[k]) / R[k][k])  - 1  
                 else :
@@ -113,7 +95,7 @@ def sphereDecoding(m,n,H,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
     flopsCount *= 14
 
     ### checker for [H*answer - x == ans] 
-    
+       
     # print("flops: ",step,flopsCount)
     # print(ans)
     # print(answer.T)

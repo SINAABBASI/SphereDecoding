@@ -6,15 +6,15 @@ pltx = []
 plty = []
 pltBabai = []
 pltAlgo = []
-
-for step in range(10,210,20):
+SNR = 20
+for step in range(10,220,20):
     pltx.append(step)
     m = step ##transmiter
     n = step ##reciver n >= m
-    sigma = 0.5 ## varianc 
+    sigma = 1 / SNR ## varianc 
 
-    # ###random sample
-    H = 10 * np.random.rand(n,m)
+    # random sample
+    H = np.random.normal(0,1,(n,m))
     flopsCount , ans, answer = sphereDecoding(m,n,H,sigma,pltBabai,pltAlgo,4)
     print("flops: ",step,flopsCount)
     print(ans)
@@ -29,7 +29,7 @@ for step in range(10,210,20):
 plt.plot(pltx, plty) 
 plt.xlabel('m') 
 plt.ylabel('number of Flops : Log(base = m)') 
-plt.title('Number of Flops for 16QAM') 
+plt.title('Number of Flops for 16QAM SNR = 20db') 
 plt.show() 
 
 

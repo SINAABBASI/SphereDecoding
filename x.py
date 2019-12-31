@@ -1,15 +1,15 @@
 import numpy as np
 import math as math
 import matplotlib.pyplot as plt
-pltx = []
-plty = []
-pltBabai = []
-pltAlgo = []
+# pltx = []
+# plty = []
+# pltBabai = []
+# pltAlgo = []
 INF = 1000111000111
 
 
-for step in range(10,110,10):
-    pltx.append(step)
+for step in range(3,4,10):
+    # pltx.append(step)
     m = step ##transmiter
     n = step ##reciver n >= m
     sigma = 0.5 ## varianc 
@@ -29,10 +29,10 @@ for step in range(10,110,10):
     ###Input H(n,m) , d ,x(1,n) , s?(1,m)
 
     #paper sample
-    # H = np.array([[2, -1, -1] ,[-1, 0 ,  -2],[-1,-1,-1]])
-    # s = np.zeros(m)
-    # x = np.array([[-1],[1],[0]])
-
+    H = np.array([[1, 0, 0] ,[0, 1 ,  0],[0,0,1]])
+    s = np.zeros(m)
+    x = np.array([[-1.8],[1.59],[0.35]])
+    print(x)
     ###checker for Guassian sample
     # v = np.random.normal(0, sigma, n)
     # s = np.random.random_integers(0,10,(m))
@@ -44,19 +44,19 @@ for step in range(10,110,10):
 
 
     # ###random sample
-    H = 10 * np.random.rand(n,m)
-    s = 2*np.random.random_integers(1,4,(m))-5
-    v = np.random.normal(0, sigma, n)
-    x = np.dot(H,s.T) + v
+    # H = 10 * np.random.rand(n,m)
+    # s = 2*np.random.random_integers(1,4,(m))-5
+    # v = np.random.normal(0, sigma, n)
+    # x = np.dot(H,s.T) + v
     # print(s)
-    s = np.zeros(m)
+    # s = np.zeros(m)
 
     d = alpha * sigma * n
     print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
     babaiD = np.linalg.norm(x-np.dot(H,babaiB))
     print("Babai est for radius =",babaiD)
-    pltBabai.append(babaiD)
+    # pltBabai.append(babaiD)
     # s = np.zeros(m)
 
     q1 = np.zeros((n,m),dtype='complex')
@@ -107,13 +107,13 @@ for step in range(10,110,10):
                 else :
                     UB[k] = np.floor((-D[k] + _y[k]) / R[k][k])
                     s[k] = np.ceil((D[k] + _y[k]) / R[k][k])  - 1
-                te = s[k] + 1
-                for j in range(3, -4 , -2):
-                    flopsCount += 1
-                    if te > j : 
-                        break
-                    s[k] = j - 2
-            s[k] = s[k] + 2
+                # te = s[k] + 1
+                # for j in range(3, -4 , -2):
+                #     flopsCount += 1
+                #     if te > j : 
+                #         break
+                #     s[k] = j - 2
+            s[k] = s[k] + 1
             # print(k,s[k],UB[k])
             setUB = 0
             if s[k] <= UB[k] :
@@ -143,14 +143,14 @@ for step in range(10,110,10):
             d *= alpha
             print(np.sqrt(d))
         else :
-            pltAlgo.append(d)
+            # pltAlgo.append(d)
             break
 
     flopsCount *= 14
     print("flops: ",step,flopsCount)
     print(ans)
     print(answer.T)
-    plty.append(math.log(flopsCount,m))
+    # plty.append(math.log(flopsCount,m))
 ### checker for [H*answer - x == ans] 
 # print(np.dot(H,answer.T),x)   
 # print(np.dot(H,answer.T) - x.T)
@@ -170,10 +170,10 @@ for step in range(10,110,10):
 
 
 ###Plot different bitween Babai radius estimation and algorithm radius estimation
-plt.plot(pltx, pltBabai,label = "Babai estimation")
-plt.plot(pltx, pltAlgo,label = "Algorithm estimation") 
-plt.legend() 
-plt.xlabel('m') 
-plt.ylabel('Radius') 
-plt.title('Different Radius estimation') 
-plt.show() 
+# plt.plot(pltx, pltBabai,label = "Babai estimation")
+# plt.plot(pltx, pltAlgo,label = "Algorithm estimation") 
+# plt.legend() 
+# plt.xlabel('m') 
+# plt.ylabel('Radius') 
+# plt.title('Different Radius estimation') 
+# plt.show() 

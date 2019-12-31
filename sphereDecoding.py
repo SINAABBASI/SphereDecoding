@@ -11,7 +11,7 @@ for step in range(10,220,20):
     pltx.append(step)
     m = step ##transmiter
     n = step ##reciver n >= m
-    sigma = 1 / SNR ## varianc 
+    sigma = 1 / math.pow(10,SNR/10) ## varianc 
 
     # random sample
     H = np.random.normal(0,1,(n,m))

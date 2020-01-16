@@ -1,19 +1,20 @@
 import numpy as np
 import math as math
+from heapq import nsmallest
 
 
-
-def sphereDecoding(m,n,H,s,x,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
+def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
     INF = 1000111000111
-    alpha = 2
+    alpha = 10
     
-    d = alpha * sigma * n
-    print("Algorithm est for radius = ",np.sqrt(d))
+    d = alpha * variance * n
+    # d = 20  
+    # print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
     babaiD = np.linalg.norm(x-np.dot(H,babaiB))
-    print("Babai est for radius =",babaiD)
+    # print("Babai est for radius =",babaiD)
     pltBabai.append(babaiD)
-
+    
     q1 = np.zeros((n,m),dtype='complex')
     res = np.linalg.qr(H)
     R = res[1]
@@ -30,7 +31,7 @@ def sphereDecoding(m,n,H,s,x,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
     flopsCount = 0
     ans = INF
     answer = np.zeros(m)
-    
+    li = []
     ###Start
     for j in range(1,10) :
         k = m - 1
@@ -60,10 +61,11 @@ def sphereDecoding(m,n,H,s,x,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
             setUB = 0
             if s[k] <= UB[k] :
                 if k == 0 :
+                    li.append(np.linalg.norm(np.dot(H,s.T)-x.T))
                     if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
                         ans = np.linalg.norm(np.dot(H,s.T)-x.T)
                         answer = s.copy()
-                        # print("***",answer)
+                        # print("***",ans,answer)
                     # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )
                 else :
                     k = k - 1
@@ -82,10 +84,14 @@ def sphereDecoding(m,n,H,s,x,sigma,pltBabai = [],pltAlgo = [],QAM = 4) :
 
         if ans == INF :
             print("The Radius is not big enough")
-            d *= alpha
+            d += alpha
             print(np.sqrt(d))
         else :
             pltAlgo.append(d)
             break
-
-    return ans,answer
+    while len(li) < 3 : 
+        li.append(np.sqrt(d))
+    li = nsmallest(3,li)
+    # print(li)
+    # return ans,answer,li
+    return li

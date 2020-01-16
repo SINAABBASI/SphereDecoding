@@ -16,22 +16,24 @@ with open('Train_set.csv', mode='w') as csv_file:
     for i in range(0,n):
         for j in range(0,m):
             fieldName.append('H'+str(i)+'_'+str(j))
-    fieldName.append('answer')
+    fieldName.append('answer0')
+    fieldName.append('answer1')
+    fieldName.append('answer2')
     writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(fieldName)
 
 
-    for step in range(0,20000):
+    for step in range(0,10000):
 
-        sigma = 1 / math.pow(10,SNR/10) ## varianc 
+        variance = 1 / math.pow(10,SNR/10) ## varianc 
         # random sample
-        print("**************sample :" , step)
+        # print("**************sample :" , step)
         
         H = np.random.normal(0,1,(n,m))
-        v = np.random.normal(0, sigma, n)
+        v = np.random.normal(0, variance, n)
         s = 2 * np.random.random_integers(1,QAM,(m))- (QAM + 1)
         x = np.dot(H,s.T) + v
-        ans, answer = sphereDecoding(m,n,H,s,x,sigma,[],[],QAM)
+        li = sphereDecoding(m,n,H,s,x,variance,[],[],QAM)
         data = []
         data.append(step)
         for i in range(0,n) :
@@ -40,9 +42,15 @@ with open('Train_set.csv', mode='w') as csv_file:
         for i in range(0,n):
             for j in range(0,m):
                 data.append(H[i][j])
-        data.append(ans)
+
+        ###Added 3 closest point
+        data.append(li[0])
+        data.append(li[1])
+        data.append(li[2])
+
         writer.writerow(data)
-        print("**************** Distance is :" , ans)
+        
+        # print("**************** Distance is :" , li)
     
 
 

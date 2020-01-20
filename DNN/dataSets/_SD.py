@@ -5,10 +5,9 @@ from heapq import nsmallest
 
 def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
     INF = 1000111000111
-    alpha = 10
+    alpha = 2
     
     d = alpha * variance * n
-    # d = 20  
     # print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
     babaiD = np.linalg.norm(x-np.dot(H,babaiB))
@@ -84,11 +83,12 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
 
         if ans == INF :
             print("The Radius is not big enough")
-            d += alpha
+            d *= alpha
             print(np.sqrt(d))
         else :
             pltAlgo.append(d)
             break
+    print(len(li))
     while len(li) < 3 : 
         li.append(np.sqrt(d))
     li = nsmallest(3,li)

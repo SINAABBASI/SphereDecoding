@@ -2,13 +2,14 @@ import numpy as np
 import math as math
 import csv
 from _SD import *
-SNR = 20
+SNRdB = 10
+SNR  =  math.pow(10,SNRdB/10)
 QAM = 4
 fieldName = []
 m = 10 ##transmiter
 n = 10 ##reciver n >= m
 
-with open('Train_set.csv', mode='w') as csv_file:
+with open('Train_set10dB.csv', mode='w') as csv_file:
     fieldName.append('id')
     for i in range(0,n) :
         fieldName.append('x'+ str(i))
@@ -25,12 +26,12 @@ with open('Train_set.csv', mode='w') as csv_file:
 
     for step in range(0,10000):
 
-        variance = 1 / math.pow(10,SNR/10) ## varianc 
+        variance = m *15 / (SNR*6) ## varianc 
         # random sample
         # print("**************sample :" , step)
         
         H = np.random.normal(0,1,(n,m))
-        v = np.random.normal(0, variance, n)
+        v = np.random.normal(0, np.sqrt(variance), n)
         s = 2 * np.random.random_integers(1,QAM,(m))- (QAM + 1)
         x = np.dot(H,s.T) + v
         li = sphereDecoding(m,n,H,s,x,variance,[],[],QAM)

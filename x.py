@@ -3,7 +3,7 @@ import math as math
 import matplotlib.pyplot as plt
 INF = 1000111000111
 boundry = 100
-rangee = range(2,15)
+rangee = range(2,6)
 pltx = []
 plty = [[0 for i in rangee] for _ in range(4)]
 # pltBabai = []
@@ -13,7 +13,7 @@ for step in rangee:
     pltx.append(step)
 
 idd = 0 
-for var in [0.01,0.1,1]:
+for var in [0.01,0.1,1,10]:
     for go in range(0,20):
         cnt = 0
         for step in rangee:
@@ -26,12 +26,11 @@ for var in [0.01,0.1,1]:
             ###Input H(n,m) , d ,x(1,n) , s?(1,m)
             # ###random sample
             H = np.random.normal(0,1,(n,m))
-            # H = 10*np.identity(m)
-            v = np.random.normal(0, np.sqrt(variance), n)
-            s = np.random.random_integers(-boundry,boundry,(m))
-            x = np.dot(H,s.T) + v
+            v = np.random.normal(0, np.sqrt(variance), (n,1))
+            s = np.random.random_integers(-boundry,boundry,(m,1))
+            x = np.dot(H,s) + v
             # print(s)
-
+            # print(x)
         
             #paper sample
             # H = np.array([[1, 0, 0] ,[0, 1 ,  0],[0,0,1]])
@@ -89,8 +88,8 @@ for var in [0.01,0.1,1]:
                     setUB = 0
                     if s[k] <= UB[k] and s[k] <= boundry:
                         if k == 0 :
-                            if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
-                                ans = np.linalg.norm(np.dot(H,s.T)-x.T)
+                            if ans > np.linalg.norm(np.dot(H,s)-x):
+                                ans = np.linalg.norm(np.dot(H,s)-x)
                                 answer = s.copy()
                                 # print("***",answer)
                             # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )

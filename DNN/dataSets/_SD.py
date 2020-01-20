@@ -5,7 +5,7 @@ from heapq import nsmallest
 
 def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
     INF = 1000111000111
-    alpha = 2
+    alpha = 4
     
     d = alpha * variance * n
     # print("Algorithm est for radius = ",np.sqrt(d))
@@ -32,7 +32,7 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
     answer = np.zeros(m)
     li = []
     ###Start
-    for j in range(1,10) :
+    for _ in range(0,10) :
         k = m - 1
         _y = y.copy()
         D = np.zeros(m)
@@ -58,11 +58,11 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
             s[k] = s[k] + 2
             # print(k,s[k],UB[k])
             setUB = 0
-            if s[k] <= UB[k] :
+            if s[k] <= UB[k] and s[k] <= QAM:
                 if k == 0 :
-                    li.append(np.linalg.norm(np.dot(H,s.T)-x.T))
-                    if ans > np.linalg.norm(np.dot(H,s.T)-x.T):
-                        ans = np.linalg.norm(np.dot(H,s.T)-x.T)
+                    li.append(np.linalg.norm(np.dot(H,s)-x))
+                    if ans > np.linalg.norm(np.dot(H,s)-x):
+                        ans = np.linalg.norm(np.dot(H,s)-x)
                         answer = s.copy()
                         # print("***",ans,answer)
                     # print(s,np.linalg.norm(np.dot(H,s.T)-x.T) )

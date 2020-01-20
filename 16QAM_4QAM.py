@@ -37,6 +37,7 @@ for go in range(100):
 plt.plot(pltx, plty4,label = "4QAM")
 plt.plot(pltx, plty16,'r--',label = "16QAM")
 plt.legend() 
+plt.xlim(2, 20)
 plt.xlabel('m') 
 plt.ylabel('number of Flop : LogM()') 
 plt.title('Differnet between 16QAM and 4QAM in 20db') 

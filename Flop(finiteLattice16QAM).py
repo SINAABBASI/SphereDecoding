@@ -37,8 +37,8 @@ plt.plot(pltx, plty,label='16QAM 20dB')
 plt.plot(pltx,[2.2]*len(pltx),'r--',label='y = 2.2')
 plt.legend()
 plt.xlabel('m') 
-plt.ylabel('number of Flop : Log M') 
-plt.title('Number of Flop for 16QAM SNR = 20db') 
+plt.ylabel('ec = Log(Number of operation)') 
+plt.title('16QAM SNR = 20db') 
 plt.show() 
 
 

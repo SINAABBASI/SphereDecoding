@@ -14,7 +14,7 @@ for go in range(100):
     for step in range(2,21):
         m = step ##transmiter
         n = step ##reciver n >= m
-        variance = m / SNR ## varianc 
+        variance = (m) / (SNR) ## varianc 
         # ###random sample
         H = np.random.normal(0,1,(n,m))
         flopsCount , ans, answer = sphereDecoding(m,n,H,variance,[],[],4)
@@ -39,7 +39,7 @@ plt.plot(pltx, plty16,'r--',label = "16QAM")
 plt.legend() 
 plt.xlim(2, 20)
 plt.xlabel('m') 
-plt.ylabel('number of Flop : LogM()') 
+plt.ylabel('ec = Log(Number of operation)') 
 plt.title('Differnet between 16QAM and 4QAM in 20db') 
 plt.show() 
 

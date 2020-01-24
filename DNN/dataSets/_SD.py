@@ -5,8 +5,7 @@ from heapq import nsmallest
 
 def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
     INF = 1000111000111
-    alpha = 4
-    
+    alpha = 1.5   
     d = alpha * variance * n
     # print("Algorithm est for radius = ",np.sqrt(d))
     babaiB = np.floor(np.dot(np.linalg.pinv(H),x))
@@ -58,7 +57,7 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
             s[k] = s[k] + 2
             # print(k,s[k],UB[k])
             setUB = 0
-            if s[k] <= UB[k] and s[k] <= QAM:
+            if s[k] <= UB[k] and s[k] < QAM:
                 if k == 0 :
                     li.append(np.linalg.norm(np.dot(H,s)-x))
                     if ans > np.linalg.norm(np.dot(H,s)-x):
@@ -70,7 +69,7 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
                     k = k - 1
                     _y[k] = y[k]
                     for i in range(k+1,m) :
-                        flopsCount += 1
+                        # flopsCount += 1
                         _y[k] -= (R[k][i] * s[i])
                 
                     D[k] = np.sqrt(D[k+1]**2 - (_y[k+1] - R[k+1][k+1] * s[k+1])**2)
@@ -80,7 +79,7 @@ def sphereDecoding(m,n,H,s,x,variance,pltBabai = [],pltAlgo = [],QAM = 4) :
                 k = k + 1
                 if k == m :
                     break
-
+                    
         if ans == INF :
             print("The Radius is not big enough")
             d *= alpha

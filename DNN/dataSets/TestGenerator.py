@@ -2,14 +2,14 @@ import numpy as np
 import math as math
 import csv
 from _SD import *
-SNRdB = 16
+SNRdB = int(input())
 SNR  =  math.pow(10,SNRdB/10)
 QAM = 4
 fieldName = []
 m = 10 ##transmiter
 n = 10 ##reciver n >= m
 
-with open('Train_set16dB.csv', mode='w') as csv_file:
+with open('Train_set'+str(SNRdB) +'dB.csv', mode='w') as csv_file:
     fieldName.append('id')
     for i in range(0,n) :
         fieldName.append('x'+ str(i))

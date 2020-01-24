@@ -5,8 +5,9 @@ import math as math
 
 def SD_SDIRS(m,n,H,x,variance,QAM = 4) :
     INF = 1000111000111
-    alpha = 2
+    alpha = 5
     d = alpha * variance* n
+    # print(d)
     q1 = np.zeros((n,m),dtype='complex')
     res = np.linalg.qr(H)
     R = res[1]
@@ -21,9 +22,11 @@ def SD_SDIRS(m,n,H,x,variance,QAM = 4) :
     flopsCount = 0
     ans = INF
     answer = np.zeros(m)
-    s = np.zeros((n,1))
+    s = np.zeros((m,1))
     ###Start
-    for j in range(0,10) :
+    # print("*****",d)
+    number_of_lattice = 0
+    for __ in range(0,10) :
         k = m - 1
         _y = y.copy()
         D = np.zeros(m)
@@ -50,6 +53,7 @@ def SD_SDIRS(m,n,H,x,variance,QAM = 4) :
             setUB = 0
             if s[k] <= UB[k] and s[k] < QAM:
                 if k == 0 :
+                    number_of_lattice += 1
                     if ans > np.linalg.norm(np.dot(H,s)-x):
                         ans = np.linalg.norm(np.dot(H,s)-x)
                         answer = s.copy()
@@ -73,9 +77,9 @@ def SD_SDIRS(m,n,H,x,variance,QAM = 4) :
         if ans == INF :
             # print("The Radius is not big enough")
             d *= alpha
-            # print(np.sqrt(d))
+            # print(d)
         else :
             break
     flopsCount *= 14
 
-    return flopsCount,ans,answer
+    return flopsCount,ans,number_of_lattice

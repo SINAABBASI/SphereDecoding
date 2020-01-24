@@ -3,7 +3,7 @@ import math as math
 import matplotlib.pyplot as plt
 INF = 1000111000111
 boundry = 100
-rangee = range(2,6)
+rangee = range(2,7)
 pltx = []
 plty = [[0 for i in rangee] for _ in range(4)]
 # pltBabai = []
@@ -14,7 +14,7 @@ for step in rangee:
 
 idd = 0 
 for var in [0.01,0.1,1,10]:
-    for go in range(0,20):
+    for go in range(0,5):
         cnt = 0
         for step in rangee:
             m = step ##transmiter
@@ -110,7 +110,7 @@ for var in [0.01,0.1,1,10]:
 
                 if ans == INF :
                     print("The Radius is not big enough")
-                    d *= alpha
+                    d += alpha
                     print(np.sqrt(d))
                 else :
                     # pltAlgo.append(d)
@@ -120,7 +120,7 @@ for var in [0.01,0.1,1,10]:
             print("flops: ",var,step,flopsCount)
             print(ans)
             # print(answer.T)
-            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/20
+            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/5
             cnt += 1
     idd += 1
 ### checker for [H*answer - x == ans] 
@@ -132,14 +132,15 @@ for var in [0.01,0.1,1,10]:
 
 
 ####Plot the number of Flops
-plt.plot(pltx, plty[0],label='0.01')
-plt.plot(pltx, plty[1],label='0.1')
-plt.plot(pltx, plty[2],label='1')
-plt.plot(pltx, plty[3],label='10') 
+plt.plot(pltx, plty[0],label='variance = 0.01')
+plt.plot(pltx, plty[1],'rx-',label='variance = 0.1')
+plt.plot(pltx, plty[2],'go-',label='variance = 1')
+plt.plot(pltx, plty[3],'ys-',label='variance = 10') 
+# plt.ylim(0,8)
 plt.legend()
 plt.xlabel('m') 
-plt.ylabel('number of Flops : Log(base = m)') 
-plt.title('My first graph!') 
+plt.ylabel('Log(Number of operation)') 
+plt.title('infinite lattice') 
 plt.show() 
 
 

@@ -3,7 +3,7 @@ import math as math
 import matplotlib.pyplot as plt
 INF = 1000111000111
 boundry = 1000
-rangee = range(2,9,2)
+rangee = range(2,9)
 pltx = []
 plty = [[0 for i in rangee] for _ in range(4)]
 # pltBabai = []
@@ -13,7 +13,7 @@ for step in rangee:
     pltx.append(step)
 
 idd = 0 
-for var in [0.01,0.1,1,10]:
+for var in [10]:
     for go in range(1):
         cnt = 0
         for step in rangee:

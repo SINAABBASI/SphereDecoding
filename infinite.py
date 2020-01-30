@@ -2,8 +2,8 @@ import numpy as np
 import math as math
 import matplotlib.pyplot as plt
 INF = 1000111000111
-boundry = 100
-rangee = range(2,7)
+boundry = 1000
+rangee = range(2,9,2)
 pltx = []
 plty = [[0 for i in rangee] for _ in range(4)]
 # pltBabai = []
@@ -14,11 +14,11 @@ for step in rangee:
 
 idd = 0 
 for var in [0.01,0.1,1,10]:
-    for go in range(0,5):
+    for go in range(1):
         cnt = 0
         for step in rangee:
             m = step ##transmiter
-            n = step ##reciver n >= m
+            n = step ##reciver 
             variance = var ## varianc
             alpha = 2
             d =  alpha * variance * n
@@ -97,7 +97,7 @@ for var in [0.01,0.1,1,10]:
                             k = k - 1
                             _y[k] = y[k]
                             for i in range(k+1,m) :
-                                flopsCount += 1
+                                # flopsCount += 1
                                 _y[k] -= (R[k][i] * s[i])
                         
                             D[k] = np.sqrt(D[k+1]**2 - (_y[k+1] - R[k+1][k+1] * s[k+1])**2)
@@ -110,7 +110,7 @@ for var in [0.01,0.1,1,10]:
 
                 if ans == INF :
                     print("The Radius is not big enough")
-                    d += alpha
+                    d *= alpha
                     print(np.sqrt(d))
                 else :
                     # pltAlgo.append(d)
@@ -120,7 +120,7 @@ for var in [0.01,0.1,1,10]:
             print("flops: ",var,step,flopsCount)
             print(ans)
             # print(answer.T)
-            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/5
+            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/20
             cnt += 1
     idd += 1
 ### checker for [H*answer - x == ans] 
@@ -137,6 +137,7 @@ plt.plot(pltx, plty[1],'rx-',label='variance = 0.1')
 plt.plot(pltx, plty[2],'go-',label='variance = 1')
 plt.plot(pltx, plty[3],'ys-',label='variance = 10') 
 # plt.ylim(0,8)
+plt.xlim
 plt.legend()
 plt.xlabel('m') 
 plt.ylabel('Log(Number of operation)') 

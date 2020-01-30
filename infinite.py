@@ -2,10 +2,10 @@ import numpy as np
 import math as math
 import matplotlib.pyplot as plt
 INF = 1000111000111
-boundry = 1000
-rangee = range(2,9)
+boundry = 100
+rangee = range(2,200,10)
 pltx = []
-plty = [[0 for i in rangee] for _ in range(4)]
+plty = [[0 for i in rangee] for _ in range(3)]
 # pltBabai = []
 # pltAlgo = []
 
@@ -13,8 +13,8 @@ for step in rangee:
     pltx.append(step)
 
 idd = 0 
-for var in [10]:
-    for go in range(1):
+for var in [0.01]:
+    for go in range(10):
         cnt = 0
         for step in rangee:
             m = step ##transmiter
@@ -120,7 +120,7 @@ for var in [10]:
             print("flops: ",var,step,flopsCount)
             print(ans)
             # print(answer.T)
-            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/20
+            plty[idd][cnt] += (math.log10(flopsCount)/math.log10(m))/10
             cnt += 1
     idd += 1
 ### checker for [H*answer - x == ans] 
@@ -133,9 +133,8 @@ for var in [10]:
 
 ####Plot the number of Flops
 plt.plot(pltx, plty[0],label='variance = 0.01')
-plt.plot(pltx, plty[1],'rx-',label='variance = 0.1')
-plt.plot(pltx, plty[2],'go-',label='variance = 1')
-plt.plot(pltx, plty[3],'ys-',label='variance = 10') 
+# plt.plot(pltx, plty[1],'rx-',label='variance = 0.1')
+# plt.plot(pltx, plty[2],'ys-',label='variance = 1') 
 # plt.ylim(0,8)
 plt.xlim
 plt.legend()

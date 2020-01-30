@@ -14,6 +14,8 @@ also, I have used **Jupyter notebook** in DNN codes to a better visual understan
 
 number of Floating operation points for sphere decoding in infinite lattice case with noise variance = 0.01, over M (number of antennas):[SphereDecodingAlgo.py]
 
+Note : the base of Logarithm at y-axis is M for all results
+
 ![](https://github.com/SINAABBASI/Sphere-Decoding/blob/master/Results/infiniteLattice_0.01.png)
 
 finite lattice case for 16-QAM symbols at snr = 20dB :[finite16QAM.py]

@@ -14,7 +14,11 @@ also, I have used **Jupyter notebook** in DNN codes to a better visual understan
 
 Note : the base of Logarithm at y-axis is M for all results
 
-number of operation for sphere decoding in infinite lattice case with noise variance = 0.01, over M (number of antennas):[infinite.py](https://github.com/SINAABBASI/Sphere-Decoding/blob/master/infinite.py)
+number of operation for sphere decoding in infinite lattice case with noise variance = 0.01,0.1,1 over 2 <= M <= 10:
+
+![](https://github.com/SINAABBASI/SphereDecoding/blob/master/Results/infinitelattice0.01to1.png)
+
+number of operation for sphere decoding in infinite lattice case with noise variance = 0.01, over 2<= M <= 200(number of antennas):[infinite.py](https://github.com/SINAABBASI/Sphere-Decoding/blob/master/infinite.py)
 
 
 ![](https://github.com/SINAABBASI/Sphere-Decoding/blob/master/Results/infiniteLattice_0.01.png)

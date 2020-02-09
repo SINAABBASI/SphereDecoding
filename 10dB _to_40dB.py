@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from SphereDecodingAlgo import *
 pltx = []
 m = n = 10
-rangee = range(10,45,5)
+rangee = range(5,30,5)
 plty = [[0 for i in rangee] for _ in range(4)]
 
 for SNRdB in rangee:
@@ -27,9 +27,10 @@ plt.plot(pltx,plty[0],label= '4QAM')
 plt.plot(pltx,plty[1],'rx-',label= '16QAM')
 plt.plot(pltx,plty[2],'go-',label= '64QAM')
 plt.plot(pltx,plty[3],'ys-',label= '256QAM')
-plt.ylabel('ec = Log(Number of operation)')
-plt.xlabel('dB')
-plt.title("N = M = 10, through 10dB - 40dB")
+plt.xlim(5,25)
+plt.ylabel('ec')
+plt.xlabel('SNR[dB]')
+plt.title("n = m = 10, through 10dB - 40dB")
 plt.legend()
 plt.show()
 
